@@ -7,7 +7,7 @@ module:
   license: MIT
   category: Retail
   icon: credit-card
-  repository: https://github.com/linearbits/erp-pos-module
+  repository: https://github.com/ahmedsamirahmedsamir/erp-pos-module
   
   # Database tables this module uses
   database:
