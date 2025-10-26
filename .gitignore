@@ -1,0 +1,16 @@
+# Binaries
+*.dylib
+*.so
+*.dll
+
+# Build artifacts
+build/
+dist/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db

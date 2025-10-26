@@ -1,0 +1,304 @@
+module:
+  code: pos
+  name: Point of Sale
+  version: 1.0.0
+  description: Complete point of sale system with touchscreen interface, payment processing, and receipt printing
+  author: LinearBits
+  license: MIT
+  category: Retail
+  icon: credit-card
+  repository: https://github.com/linearbits/erp-pos-module
+  
+  # Database tables this module uses
+  database:
+    # Core tables (shared across modules)
+    core_tables:
+      - customers
+      - products
+    # Module-specific tables
+    tables:
+      - pos_sessions
+      - pos_transactions
+      - pos_transaction_items
+      - pos_payments
+      - pos_receipts
+      - pos_registers
+      - pos_cash_drawers
+      - pos_cash_drawer_transactions
+      - pos_products
+      - pos_customers
+      - pos_discounts
+      - pos_taxes
+      - pos_shifts
+      - pos_employees
+  
+  # Permissions required
+  permissions:
+    - pos.transactions.view
+    - pos.transactions.create
+    - pos.transactions.edit
+    - pos.transactions.delete
+    - pos.sessions.view
+    - pos.sessions.create
+    - pos.sessions.close
+    - pos.payments.view
+    - pos.payments.create
+    - pos.payments.edit
+    - pos.receipts.view
+    - pos.receipts.print
+    - pos.registers.view
+    - pos.registers.create
+    - pos.registers.edit
+    - pos.registers.delete
+    - pos.cash_drawers.view
+    - pos.cash_drawers.open
+    - pos.cash_drawers.close
+    - pos.cash_drawers.count
+    - pos.products.view
+    - pos.products.create
+    - pos.products.edit
+    - pos.products.delete
+    - pos.customers.view
+    - pos.customers.create
+    - pos.customers.edit
+    - pos.discounts.view
+    - pos.discounts.create
+    - pos.discounts.edit
+    - pos.discounts.delete
+    - pos.taxes.view
+    - pos.taxes.create
+    - pos.taxes.edit
+    - pos.taxes.delete
+    - pos.shifts.view
+    - pos.shifts.create
+    - pos.shifts.edit
+    - pos.shifts.close
+    - pos.employees.view
+    - pos.employees.create
+    - pos.employees.edit
+    - pos.employees.delete
+  
+  # API routes
+  api:
+    prefix: /api/v1/pos
+    routes:
+      - path: /sessions
+        methods: [GET, POST, PUT, DELETE]
+        handler: handlers.POSSessionHandler
+      - path: /sessions/{id}/close
+        methods: [POST]
+        handler: handlers.POSSessionHandler.CloseSession
+      - path: /transactions
+        methods: [GET, POST, PUT, DELETE]
+        handler: handlers.POSTransactionHandler
+      - path: /transactions/{id}/items
+        methods: [GET, POST, PUT, DELETE]
+        handler: handlers.POSTransactionItemHandler
+      - path: /payments
+        methods: [GET, POST, PUT, DELETE]
+        handler: handlers.POSPaymentHandler
+      - path: /receipts
+        methods: [GET, POST]
+        handler: handlers.POSReceiptHandler
+      - path: /receipts/{id}/print
+        methods: [POST]
+        handler: handlers.POSReceiptHandler.PrintReceipt
+      - path: /registers
+        methods: [GET, POST, PUT, DELETE]
+        handler: handlers.POSRegisterHandler
+      - path: /cash-drawers
+        methods: [GET, POST, PUT, DELETE]
+        handler: handlers.POSCashDrawerHandler
+      - path: /cash-drawers/{id}/open
+        methods: [POST]
+        handler: handlers.POSCashDrawerHandler.OpenDrawer
+      - path: /cash-drawers/{id}/close
+        methods: [POST]
+        handler: handlers.POSCashDrawerHandler.CloseDrawer
+      - path: /cash-drawers/{id}/count
+        methods: [POST]
+        handler: handlers.POSCashDrawerHandler.CountCash
+      - path: /products
+        methods: [GET, POST, PUT, DELETE]
+        handler: handlers.POSProductHandler
+      - path: /customers
+        methods: [GET, POST, PUT, DELETE]
+        handler: handlers.POSCustomerHandler
+      - path: /discounts
+        methods: [GET, POST, PUT, DELETE]
+        handler: handlers.POSDiscountHandler
+      - path: /taxes
+        methods: [GET, POST, PUT, DELETE]
+        handler: handlers.POSTaxHandler
+      - path: /shifts
+        methods: [GET, POST, PUT, DELETE]
+        handler: handlers.POSShiftHandler
+      - path: /shifts/{id}/close
+        methods: [POST]
+        handler: handlers.POSShiftHandler.CloseShift
+      - path: /employees
+        methods: [GET, POST, PUT, DELETE]
+        handler: handlers.POSEmployeeHandler
+  
+  # Frontend routes
+  frontend:
+    routes:
+      - path: /pos
+        component: POSDashboard
+        title: POS Dashboard
+      - path: /pos/terminal
+        component: POSTerminal
+        title: POS Terminal
+      - path: /pos/sessions
+        component: POSSessionList
+        title: POS Sessions
+      - path: /pos/sessions/{id}
+        component: POSSessionDetail
+        title: POS Session Details
+      - path: /pos/transactions
+        component: POSTransactionList
+        title: POS Transactions
+      - path: /pos/transactions/{id}
+        component: POSTransactionDetail
+        title: POS Transaction Details
+      - path: /pos/payments
+        component: POSPaymentList
+        title: POS Payments
+      - path: /pos/receipts
+        component: POSReceiptList
+        title: POS Receipts
+      - path: /pos/registers
+        component: POSRegisterManagement
+        title: POS Registers
+      - path: /pos/cash-drawers
+        component: POSCashDrawerManagement
+        title: Cash Drawers
+      - path: /pos/products
+        component: POSProductManagement
+        title: POS Products
+      - path: /pos/customers
+        component: POSCustomerManagement
+        title: POS Customers
+      - path: /pos/discounts
+        component: POSDiscountManagement
+        title: POS Discounts
+      - path: /pos/taxes
+        component: POSTaxManagement
+        title: POS Taxes
+      - path: /pos/shifts
+        component: POSShiftManagement
+        title: POS Shifts
+      - path: /pos/employees
+        component: POSEmployeeManagement
+        title: POS Employees
+  
+  # Menu items
+  menu:
+    - label: POS
+      icon: credit-card
+      path: /pos
+      children:
+        - label: Terminal
+          path: /pos/terminal
+        - label: Sessions
+          path: /pos/sessions
+        - label: Transactions
+          path: /pos/transactions
+        - label: Payments
+          path: /pos/payments
+        - label: Receipts
+          path: /pos/receipts
+        - label: Registers
+          path: /pos/registers
+        - label: Cash Drawers
+          path: /pos/cash-drawers
+        - label: Products
+          path: /pos/products
+        - label: Customers
+          path: /pos/customers
+        - label: Discounts
+          path: /pos/discounts
+        - label: Taxes
+          path: /pos/taxes
+        - label: Shifts
+          path: /pos/shifts
+        - label: Employees
+          path: /pos/employees
+  
+  # Settings
+  settings:
+    - key: default_payment_method
+      type: select
+      label: Default Payment Method
+      options:
+        - value: cash
+          label: Cash
+        - value: card
+          label: Card
+        - value: check
+          label: Check
+        - value: gift_card
+          label: Gift Card
+      default: cash
+    - key: auto_print_receipts
+      type: boolean
+      label: Auto-print Receipts
+      default: true
+    - key: require_customer_for_sale
+      type: boolean
+      label: Require Customer for Sale
+      default: false
+    - key: enable_discounts
+      type: boolean
+      label: Enable Discounts
+      default: true
+    - key: enable_tips
+      type: boolean
+      label: Enable Tips
+      default: true
+    - key: default_tip_percentage
+      type: number
+      label: Default Tip Percentage
+      default: 15
+      depends_on:
+        enable_tips: true
+    - key: enable_loyalty_program
+      type: boolean
+      label: Enable Loyalty Program
+      default: false
+    - key: loyalty_points_per_dollar
+      type: number
+      label: Loyalty Points per Dollar
+      default: 1
+      depends_on:
+        enable_loyalty_program: true
+    - key: enable_inventory_tracking
+      type: boolean
+      label: Enable Inventory Tracking
+      default: true
+    - key: enable_multi_location
+      type: boolean
+      label: Enable Multi-location Support
+      default: false
+    - key: session_timeout_minutes
+      type: number
+      label: Session Timeout (minutes)
+      default: 480
+    - key: require_manager_override
+      type: boolean
+      label: Require Manager Override for Refunds
+      default: true
+    - key: max_refund_percentage
+      type: number
+      label: Maximum Refund Percentage
+      default: 100
+    - key: enable_cash_drawer_tracking
+      type: boolean
+      label: Enable Cash Drawer Tracking
+      default: true
+    - key: cash_drawer_opening_amount
+      type: number
+      label: Default Cash Drawer Opening Amount
+      default: 100
+      depends_on:
+        enable_cash_drawer_tracking: true
