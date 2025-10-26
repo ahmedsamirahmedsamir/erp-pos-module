@@ -1,4 +1,4 @@
-package pos
+package main
 
 import (
 	"database/sql"
@@ -10,19 +10,22 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/jmoiron/sqlx"
+	"go.uber.org/zap"
 )
 
 // ShiftHandler handles shift-related operations
 type ShiftHandler struct {
 	db          *sqlx.DB
+	logger      *zap.Logger
 	baseHandler *POSHandler
 }
 
 // NewShiftHandler creates a new shift handler
-func NewShiftHandler(db *sqlx.DB) *ShiftHandler {
+func NewShiftHandler(db *sqlx.DB, logger *zap.Logger) *ShiftHandler {
 	return &ShiftHandler{
 		db:          db,
-		baseHandler: NewPOSHandler(db),
+		logger:      logger,
+		baseHandler: NewPOSHandler(db, logger),
 	}
 }
 
@@ -213,5 +216,3 @@ func (h *ShiftHandler) ClosePOSShift(w http.ResponseWriter, r *http.Request) {
 		"message":          "Shift closed successfully",
 	})
 }
-
-

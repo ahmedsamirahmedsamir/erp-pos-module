@@ -1,4 +1,4 @@
-package pos
+package main
 
 import (
 	"database/sql"
@@ -9,19 +9,22 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/jmoiron/sqlx"
+	"go.uber.org/zap"
 )
 
 // GiftCardHandler handles gift card operations
 type GiftCardHandler struct {
 	db          *sqlx.DB
+	logger      *zap.Logger
 	baseHandler *POSHandler
 }
 
 // NewGiftCardHandler creates a new gift card handler
-func NewGiftCardHandler(db *sqlx.DB) *GiftCardHandler {
+func NewGiftCardHandler(db *sqlx.DB, logger *zap.Logger) *GiftCardHandler {
 	return &GiftCardHandler{
 		db:          db,
-		baseHandler: NewPOSHandler(db),
+		logger:      logger,
+		baseHandler: NewPOSHandler(db, logger),
 	}
 }
 
@@ -276,5 +279,3 @@ func (h *GiftCardHandler) GetGiftCardByNumber(w http.ResponseWriter, r *http.Req
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(card)
 }
-
-

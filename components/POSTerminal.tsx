@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { Plus, Minus, Trash2, CreditCard, DollarSign, Receipt, User, Search } from 'lucide-react'
-import { api } from '../../lib/api'
+import { api } from '@erp-modules/shared'
 
 interface Product {
   id: string

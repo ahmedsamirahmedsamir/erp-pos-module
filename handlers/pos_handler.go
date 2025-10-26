@@ -1,4 +1,4 @@
-package pos
+package main
 
 import (
 	"database/sql"
@@ -10,16 +10,18 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/jmoiron/sqlx"
+	"go.uber.org/zap"
 )
 
 // POSHandler handles all POS-related HTTP requests
 type POSHandler struct {
-	db *sqlx.DB
+	db     *sqlx.DB
+	logger *zap.Logger
 }
 
 // NewPOSHandler creates a new POS handler
-func NewPOSHandler(db *sqlx.DB) *POSHandler {
-	return &POSHandler{db: db}
+func NewPOSHandler(db *sqlx.DB, logger *zap.Logger) *POSHandler {
+	return &POSHandler{db: db, logger: logger}
 }
 
 // =================================================================

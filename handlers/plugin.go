@@ -12,9 +12,10 @@ import (
 
 // POSPlugin implements the ModulePlugin interface
 type POSPlugin struct {
-	db      *sqlx.DB
-	logger  *zap.Logger
-	handler *POSHandler
+	db           *sqlx.DB
+	logger       *zap.Logger
+	handler      *POSHandler
+	shiftHandler *ShiftHandler
 }
 
 // NewPOSPlugin creates a new plugin instance
@@ -27,6 +28,7 @@ func (p *POSPlugin) Initialize(db *sqlx.DB, logger *zap.Logger) error {
 	p.db = db
 	p.logger = logger
 	p.handler = NewPOSHandler(db, logger)
+	p.shiftHandler = NewShiftHandler(db, logger)
 	p.logger.Info("POS module initialized")
 	return nil
 }
@@ -53,10 +55,15 @@ func (p *POSPlugin) GetHandler(route string, method string) (http.HandlerFunc, e
 	method = strings.ToUpper(method)
 
 	handlers := map[string]http.HandlerFunc{
-		"GET /transactions":  p.handler.GetTransactions,
-		"POST /transactions": p.handler.CreateTransaction,
-		"GET /shifts":        p.handler.GetShifts,
-		"POST /shifts":       p.handler.CreateShift,
+		"GET /transactions":  p.handler.GetPOSTransactions,
+		"POST /transactions": p.handler.CreatePOSTransaction,
+		"GET /shifts":        p.shiftHandler.GetPOSShifts,
+		"POST /shifts":       p.shiftHandler.CreatePOSShift,
+		"GET /sessions":      p.handler.GetPOSSessions,
+		"POST /sessions":     p.handler.CreatePOSSession,
+		"GET /registers":     p.handler.GetPOSRegisters,
+		"POST /registers":    p.handler.CreatePOSRegister,
+		"GET /analytics":     p.handler.GetPOSAnalytics,
 	}
 
 	key := method + " " + route

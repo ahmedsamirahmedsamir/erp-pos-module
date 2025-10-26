@@ -1,4 +1,4 @@
-package pos
+package main
 
 import (
 	"database/sql"
@@ -7,19 +7,22 @@ import (
 	"time"
 
 	"github.com/jmoiron/sqlx"
+	"go.uber.org/zap"
 )
 
 // CustomerHandler handles POS customer operations
 type CustomerHandler struct {
 	db          *sqlx.DB
+	logger      *zap.Logger
 	baseHandler *POSHandler
 }
 
 // NewCustomerHandler creates a new customer handler
-func NewCustomerHandler(db *sqlx.DB) *CustomerHandler {
+func NewCustomerHandler(db *sqlx.DB, logger *zap.Logger) *CustomerHandler {
 	return &CustomerHandler{
 		db:          db,
-		baseHandler: NewPOSHandler(db),
+		logger:      logger,
+		baseHandler: NewPOSHandler(db, logger),
 	}
 }
 

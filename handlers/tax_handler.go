@@ -1,23 +1,26 @@
-package pos
+package main
 
 import (
 	"encoding/json"
 	"net/http"
 
 	"github.com/jmoiron/sqlx"
+	"go.uber.org/zap"
 )
 
 // TaxHandler handles tax-related operations
 type TaxHandler struct {
 	db          *sqlx.DB
+	logger      *zap.Logger
 	baseHandler *POSHandler
 }
 
 // NewTaxHandler creates a new tax handler
-func NewTaxHandler(db *sqlx.DB) *TaxHandler {
+func NewTaxHandler(db *sqlx.DB, logger *zap.Logger) *TaxHandler {
 	return &TaxHandler{
 		db:          db,
-		baseHandler: NewPOSHandler(db),
+		logger:      logger,
+		baseHandler: NewPOSHandler(db, logger),
 	}
 }
 
@@ -104,5 +107,3 @@ func (h *TaxHandler) CreatePOSTax(w http.ResponseWriter, r *http.Request) {
 		"message": "Tax created successfully",
 	})
 }
-
-

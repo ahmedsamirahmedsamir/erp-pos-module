@@ -1,4 +1,4 @@
-package pos
+package main
 
 import (
 	"database/sql"
@@ -8,19 +8,22 @@ import (
 	"time"
 
 	"github.com/jmoiron/sqlx"
+	"go.uber.org/zap"
 )
 
 // ProductHandler handles POS product-related operations
 type ProductHandler struct {
 	db          *sqlx.DB
+	logger      *zap.Logger
 	baseHandler *POSHandler
 }
 
 // NewProductHandler creates a new product handler
-func NewProductHandler(db *sqlx.DB) *ProductHandler {
+func NewProductHandler(db *sqlx.DB, logger *zap.Logger) *ProductHandler {
 	return &ProductHandler{
 		db:          db,
-		baseHandler: NewPOSHandler(db),
+		logger:      logger,
+		baseHandler: NewPOSHandler(db, logger),
 	}
 }
 

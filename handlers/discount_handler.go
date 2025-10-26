@@ -1,4 +1,4 @@
-package pos
+package main
 
 import (
 	"database/sql"
@@ -8,19 +8,22 @@ import (
 	"time"
 
 	"github.com/jmoiron/sqlx"
+	"go.uber.org/zap"
 )
 
 // DiscountHandler handles discount and coupon operations
 type DiscountHandler struct {
 	db          *sqlx.DB
+	logger      *zap.Logger
 	baseHandler *POSHandler
 }
 
 // NewDiscountHandler creates a new discount handler
-func NewDiscountHandler(db *sqlx.DB) *DiscountHandler {
+func NewDiscountHandler(db *sqlx.DB, logger *zap.Logger) *DiscountHandler {
 	return &DiscountHandler{
 		db:          db,
-		baseHandler: NewPOSHandler(db),
+		logger:      logger,
+		baseHandler: NewPOSHandler(db, logger),
 	}
 }
 
@@ -319,5 +322,3 @@ func (h *DiscountHandler) CreateCouponCode(w http.ResponseWriter, r *http.Reques
 		"message":    "Coupon code created successfully",
 	})
 }
-
-
